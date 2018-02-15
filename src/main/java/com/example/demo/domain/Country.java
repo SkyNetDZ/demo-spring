@@ -1,14 +1,18 @@
-package com.example.domain;
+package com.example.demo.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+import java.util.List;
+
+@Document(collection = "countries")
 public class Country {
     public String id ;
     public String name;
     public String code ;
     public String continent;
-
+    public String wikipedia_link;
+    public String keywords;
+    public List<Airport> airports;
 
     public Country(String id, String name, String code, String continent) {
         this.id = id;
@@ -48,5 +52,30 @@ public class Country {
 
     public void setContinent(String continent) {
         this.continent = continent;
+    }
+
+
+    public String getWikipedia_link() {
+        return wikipedia_link;
+    }
+
+    public void setWikipedia_link(String wikipedia_link) {
+        this.wikipedia_link = wikipedia_link;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    public List<Airport> getAirports() {
+        return airports;
+    }
+
+    public void setAirports(List<Airport> airports) {
+        this.airports = airports;
     }
 }
