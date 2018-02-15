@@ -1,7 +1,5 @@
 package com.example.demo.domain;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;

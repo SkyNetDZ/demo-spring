@@ -9,4 +9,6 @@ public interface CountryRepository extends ReactiveCrudRepository <Country,Strin
     Mono<Country> findById(String id);
 
     Flux<Country> findAll();
+
+    Flux<Country> findAllByNameIsStartingWith(String name);
 }
