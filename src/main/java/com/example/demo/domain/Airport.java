@@ -1,6 +1,8 @@
 package com.example.demo.domain;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -11,7 +13,10 @@ public class Airport {
     public String ident;
     public String type;
     public String name;
+    @Indexed
+    @Field("iso_country")
     public String isoCountry;
+    @Field("iso_region")
     public String isoRegion;
     public List<Runway> runways;
 
@@ -23,6 +28,10 @@ public class Airport {
         this.isoCountry = isoCountry;
         this.isoRegion = isoRegion;
         this.runways = runways;
+    }
+
+    public Airport() {
+
     }
 
     public String getId() {

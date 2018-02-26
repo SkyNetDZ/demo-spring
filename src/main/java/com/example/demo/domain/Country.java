@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "countries")
@@ -19,6 +20,7 @@ public class Country {
         this.name = name;
         this.code = code;
         this.continent = continent;
+        this.airports = new ArrayList<Airport>();
     }
 
 
@@ -77,5 +79,9 @@ public class Country {
 
     public void setAirports(List<Airport> airports) {
         this.airports = airports;
+    }
+
+    public void addAirport(Airport airport) {
+        this.airports.add(airport);
     }
 }
