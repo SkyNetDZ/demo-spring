@@ -24,7 +24,7 @@ public class CountryController {
         Flux<Country> countries = this.countryRepository.findAllByNameIsStartingWith(name);
         countries.flatMap(country ->
                 this.airportRepository.findByIsoCountryEquals(country.getCode())
-                        .map( a -> addAirportToCountry(country))
+                        .map(addAirportToCountry(country))
                         .reduce((country1, country2) -> country2)
         );
         return countries;
