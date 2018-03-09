@@ -2,6 +2,7 @@ package com.example.demo.web;
 
 import com.example.demo.domain.*;
 
+import jdk.nashorn.internal.runtime.logging.DebugLogger;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,18 +35,16 @@ public class CountryController {
     @GetMapping("/request")
     public Flux<Country> getAll(@RequestParam String name) {
         Flux<Country> countries = this.countryRepository.findAllByNameIsStartingWith(name);
-        countries.map(c ->
-                    airportRepository.findByIsoCountryEquals(c.getCode())
-                            .groupBy(Airport::getIsoCountry)
-                            .flatMap(stringAirportGroupedFlux -> stringAirportGroupedFlux.map(addAirportToCountry(c)))
+        countries.subscribe(c ->
+                airportRepository.findByIsoCountryEquals(c.getCode()).map(addAirportToCountry(c)).reduce(((country, country2) -> country2)).subscribe(country2 -> System.out.println(country2.getAirports().size()))
         );
         return countries;
-    }
+}
 
 
     private Function<Airport, Country> addAirportToCountry(Country country) {
         return airport -> {
-            if(airport.isoCountry.equals(country.getCode())) country.addAirport(airport);
+            country.addAirport(airport);
             return country;
         };
     }
