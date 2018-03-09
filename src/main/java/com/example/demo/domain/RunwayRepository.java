@@ -8,5 +8,5 @@ public interface RunwayRepository extends ReactiveCrudRepository<Runway,String> 
 
     Mono<Runway> findById(String id);
 
-    Flux<Runway> findAll();
+    Flux<Runway> findByAirportIdentEquals(String ident);
 }

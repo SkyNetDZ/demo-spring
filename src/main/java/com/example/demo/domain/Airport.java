@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "airports")
@@ -20,18 +21,14 @@ public class Airport {
     public String isoRegion;
     public List<Runway> runways;
 
-    public Airport(final String id,final String ident, final String type,final String name, final String isoCountry, final String isoRegion , final List<Runway> runways) {
+    public Airport(String id, String ident, String type, String name, String isoCountry, String isoRegion) {
         this.id = id;
         this.ident = ident;
         this.type = type;
         this.name = name;
         this.isoCountry = isoCountry;
         this.isoRegion = isoRegion;
-        this.runways = runways;
-    }
-
-    public Airport() {
-
+        this.runways = new ArrayList<Runway>();
     }
 
     public String getId() {
@@ -88,5 +85,9 @@ public class Airport {
 
     public void setRunways(List<Runway> runways) {
         this.runways = runways;
+    }
+
+    public void addRunway(Runway runway) {
+        this.runways.add(runway);
     }
 }

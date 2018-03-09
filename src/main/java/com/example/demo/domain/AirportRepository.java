@@ -12,6 +12,4 @@ public interface AirportRepository extends ReactiveCrudRepository<Airport,String
 
     Flux<Airport> findByIsoCountryEquals(String codeCountry);
 
-    Flux<Airport> findByTypeEquals(String type);
-
 }

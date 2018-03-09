@@ -1,21 +1,25 @@
 package com.example.demo.domain;
 
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "runways")
 public class Runway {
 
     public String id;
     public String airportRef;
+    @Indexed
+    @Field("airport_ident")
     public String airportIdent;
     public String lentgthFt;
     public String widthFT;
-    public Boolean lighted;
-    public Boolean closed;
+    public Integer lighted;
+    public Integer closed;
 
 
-    public Runway(String id, String airportRef, String airportIdent, String lentgthFt, String widthFT, Boolean lighted, Boolean closed) {
+    public Runway(String id, String airportRef, String airportIdent, String lentgthFt, String widthFT, Integer lighted, Integer closed) {
         this.id = id;
         this.airportRef = airportRef;
         this.airportIdent = airportIdent;
@@ -65,19 +69,19 @@ public class Runway {
         this.widthFT = widthFT;
     }
 
-    public Boolean getLighted() {
+    public Integer getLighted() {
         return lighted;
     }
 
-    public void setLighted(Boolean lighted) {
+    public void setLighted(Integer lighted) {
         this.lighted = lighted;
     }
 
-    public Boolean getClosed() {
+    public Integer getClosed() {
         return closed;
     }
 
-    public void setClosed(Boolean closed) {
+    public void setClosed(Integer closed) {
         this.closed = closed;
     }
 }

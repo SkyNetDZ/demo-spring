@@ -35,23 +35,34 @@ public class CountryController {
     @GetMapping("/request")
     public Flux<Country> getAll(@RequestParam String name) {
         Flux<Country> countries = this.countryRepository.findAllByNameIsStartingWith(name);
-        countries.subscribe(c ->
-                airportRepository.findByIsoCountryEquals(c.getCode()).map(addAirportToCountry(c)).reduce(((country, country2) -> country2)).subscribe(country2 -> System.out.println(country2.getAirports().size()))
+        return countries.flatMap(c ->
+                airportRepository.findByIsoCountryEquals(c.getCode()).map(addAirportToCountry(c)).reduce(((country, country2) -> country2))
         );
-        return countries;
-}
+    }
 
 
     private Function<Airport, Country> addAirportToCountry(Country country) {
         return airport -> {
-            country.addAirport(airport);
+            country.addAirport(runwayRepository.findByAirportIdentEquals(airport.getIdent()).map(addRunwayToAirport(airport)).reduce((airport1, airport2) -> airport2).block());
             return country;
+        };
+    }
+
+    private Function<Runway, Airport> addRunwayToAirport(Airport airport) {
+        return runway -> {
+            airport.addRunway(runway);
+            return airport;
         };
     }
 
     @GetMapping("/airports")
     public Flux<Airport> getAllAirports() {
         return (Flux<Airport>) this.airportRepository.findByIsoCountryEquals("FR").log().map(a -> a.getName()).subscribe(System.out::println);
+    }
+
+    @GetMapping("/runways")
+    public Flux<Runway> getAllRunways() {
+        return this.runwayRepository.findByAirportIdentEquals("NFTE");
     }
 
 
