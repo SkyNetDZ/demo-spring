@@ -43,7 +43,7 @@ public class CountryController {
 
     private Function<Airport, Country> addAirportToCountry(Country country) {
         return airport -> {
-            country.addAirport(runwayRepository.findByAirportIdentEquals(airport.getIdent()).map(addRunwayToAirport(airport)).reduce((airport1, airport2) -> airport2).block());
+            country.addAirport(airport);
             return country;
         };
     }
@@ -55,9 +55,10 @@ public class CountryController {
         };
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/airports")
-    public Flux<Airport> getAllAirports() {
-        return (Flux<Airport>) this.airportRepository.findByIsoCountryEquals("FR").log().map(a -> a.getName()).subscribe(System.out::println);
+    public Flux<Airport> getAllAirports(@RequestParam String isoCountry) {
+        return this.airportRepository.findByIsoCountryEquals(isoCountry);
     }
 
     @GetMapping("/runways")
