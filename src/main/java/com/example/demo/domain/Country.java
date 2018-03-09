@@ -82,7 +82,6 @@ public class Country {
     }
 
     public void addAirport(Airport airport) {
-        System.out.println(airport.name);
         this.airports.add(airport);
     }
 }

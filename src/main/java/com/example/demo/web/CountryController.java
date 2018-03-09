@@ -1,11 +1,20 @@
 package com.example.demo.web;
 
 import com.example.demo.domain.*;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.GroupedFlux;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 public class CountryController {
@@ -24,28 +33,19 @@ public class CountryController {
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/request")
     public Flux<Country> getAll(@RequestParam String name) {
-//        Flux<String> flux = (Flux<String>) Flux.just("red", "white", "blue")
-//                .log()
-//                .map(String::toUpperCase)
-//                .subscribe(System.out::println);
         Flux<Country> countries = this.countryRepository.findAllByNameIsStartingWith(name);
-        countries.flatMap( country ->
-                (Flux<Country>) buildAirports(country)
+        countries.map(c ->
+                    airportRepository.findByIsoCountryEquals(c.getCode())
+                            .groupBy(Airport::getIsoCountry)
+                            .flatMap(stringAirportGroupedFlux -> stringAirportGroupedFlux.map(addAirportToCountry(c)))
         );
-                        //.reduce((country1, country2) -> country2)
         return countries;
     }
 
-    private Disposable buildAirports(Country country) {
-        return this.airportRepository.findByIsoCountryEquals(country.getCode())
-        .log()
-        .map(a -> a.getName())
-        .subscribe(System.out::println);
-    }
 
     private Function<Airport, Country> addAirportToCountry(Country country) {
         return airport -> {
-            country.addAirport(airport);
+            if(airport.isoCountry.equals(country.getCode())) country.addAirport(airport);
             return country;
         };
     }
