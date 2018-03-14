@@ -10,7 +10,9 @@ import java.util.List;
 @Document(collection = "airports")
 public class Airport {
 
-    public String id;
+	@Indexed
+	@Field("id")
+    public int id;
     public String ident;
     public String type;
     public String name;
@@ -21,7 +23,7 @@ public class Airport {
     public String isoRegion;
     public List<Runway> runways;
 
-    public Airport(String id, String ident, String type, String name, String isoCountry, String isoRegion) {
+    public Airport(int id, String ident, String type, String name, String isoCountry, String isoRegion) {
         this.id = id;
         this.ident = ident;
         this.type = type;
@@ -31,11 +33,11 @@ public class Airport {
         this.runways = new ArrayList<Runway>();
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

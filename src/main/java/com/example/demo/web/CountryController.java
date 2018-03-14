@@ -34,10 +34,10 @@ public class CountryController {
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/request")
     public Flux<Country> getAll(@RequestParam String name) {
-        Flux<Country> countries = this.countryRepository.findAllByNameIsStartingWith(name);
-        return countries.flatMap(c ->
-                airportRepository.findByIsoCountryEquals(c.getCode()).map(addAirportToCountry(c)).reduce(((country, country2) -> country2))
-        );
+        return this.countryRepository.findAllByNameIsStartingWith(name);
+//        /*return countries.flatMap(c ->
+//                airportRepository.findByIsoCountryEquals(c.getCode()).map(addAirportToCountry(c)).reduce(((country, country2) -> country2))
+//        );*/
     }
 
 
@@ -61,9 +61,10 @@ public class CountryController {
         return this.airportRepository.findByIsoCountryEquals(isoCountry);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/runways")
-    public Flux<Runway> getAllRunways() {
-        return this.runwayRepository.findByAirportIdentEquals("NFTE");
+    public Flux<Runway> getAllRunways(@RequestParam int ref) {
+        return this.runwayRepository.findByAirportRefEquals(ref);
     }
 
 

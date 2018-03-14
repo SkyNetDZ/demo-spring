@@ -8,8 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "runways")
 public class Runway {
 
+	@Indexed
+	@Field("id")
     public String id;
-    public String airportRef;
+	@Field("airport_ref")
+    public int airportRef;
     @Indexed
     @Field("airport_ident")
     public String airportIdent;
@@ -19,7 +22,7 @@ public class Runway {
     public Integer closed;
 
 
-    public Runway(String id, String airportRef, String airportIdent, String lentgthFt, String widthFT, Integer lighted, Integer closed) {
+    public Runway(String id, int airportRef, String airportIdent, String lentgthFt, String widthFT, Integer lighted, Integer closed) {
         this.id = id;
         this.airportRef = airportRef;
         this.airportIdent = airportIdent;
@@ -37,11 +40,11 @@ public class Runway {
         this.id = id;
     }
 
-    public String getAirportRef() {
+    public int getAirportRef() {
         return airportRef;
     }
 
-    public void setAirportRef(String airportRef) {
+    public void setAirportRef(int airportRef) {
         this.airportRef = airportRef;
     }
 
